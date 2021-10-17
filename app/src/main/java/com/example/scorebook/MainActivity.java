@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 String newGameTitle = data.getStringExtra(NewGameActivity.Extra_GameTitle);
                 String newGameDesc = data.getStringExtra(NewGameActivity.Extra_GameDesc);
+                String playerString = data.getStringExtra(NewGameActivity.Extra_GamePlayers);
+                int players = Integer.parseInt(playerString);
 
                 TypedArray gameImageResource = getResources().obtainTypedArray(R.array.game_images);
                 Random rand = new Random();
 
-                mGames.add(new CardGame(newGameTitle, newGameDesc, 4, gameImageResource.getResourceId(rand.nextInt(10), 0)));
+                mGames.add(new CardGame(newGameTitle, newGameDesc, players, gameImageResource.getResourceId(rand.nextInt(10), 0)));
                 gameImageResource.recycle();
 
                 mAdapter.notifyDataSetChanged();

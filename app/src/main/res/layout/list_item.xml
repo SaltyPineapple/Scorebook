@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/card_image"
-            android:text="Title"
+            android:text="@string/titleCardView"
             android:padding="8dp"
             style="@style/TextAppearance.AppCompat.Subhead"/>
         <TextView
@@ -30,9 +30,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/card_title"
-            android:text="Game Description"
+            android:text="@string/game_descriptionCardView"
             android:padding="8dp"
             style="@style/TextAppearance.AppCompat.Subhead"/>
+
+        <TextView
+            android:id="@+id/card_players"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:layout_below="@id/card_title"
+            android:padding="8dp"
+            android:text="@string/playersCardView" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

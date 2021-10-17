@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Scorebook</string>
     <string name="new_game">New Game</string>
+    <string name="titleCardView">Title</string>
+    <string name="game_descriptionCardView">Game Description</string>
+    <string name="playersCardView">Players: </string>
+    <string name="enter_playersHint">Enter Players</string>
+    <string name="number_of_players">Number of Players:</string>
+    <string name="enter_descriptionHint">Enter Description</string>
+    <string name="description">Description:</string>
+    <string name="enter_titleHint">Enter Title</string>
+    <string name="create_game">Create Game</string>
+    <string name="game_title">Game Title:</string>
     <array name="game_images">
         <item>@drawable/img_baseball</item>
         <item>@drawable/img_badminton</item>

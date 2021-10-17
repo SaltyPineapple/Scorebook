@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Game Title: "
+        android:text="@string/game_title"
         style="@style/NewGameWords"
         />
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter Title"
+        android:hint="@string/enter_titleHint"
         android:minHeight="48dp"
         app:layout_constraintStart_toEndOf="@+id/tv_newGame_gameTitle"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_newGame_gameTitle"
         style="@style/NewGameWords"
-        android:text="Description: "
+        android:text="@string/description"
         />
 
     <MultiAutoCompleteTextView
@@ -43,29 +43,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter Description"
+        android:hint="@string/enter_descriptionHint"
         android:inputType="textMultiLine"
         android:minHeight="48dp"
         app:layout_constraintStart_toEndOf="@+id/tv_newGame_gameDesc"
         app:layout_constraintTop_toBottomOf="@+id/et_newGame_gameTitle" />
 
+
     <TextView
         android:id="@+id/tv_newGame_Players"
+        style="@style/NewGameWords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/number_of_players"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_newGame_gameDesc"
-        style="@style/NewGameWords"
-        android:text="Number of Players: "
-        />
+        app:layout_constraintTop_toBottomOf="@+id/et_newGame_gameDesc" />
 
-<!--    <NumberPicker-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/tv_newGame_Players"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/et_newGame_gameDesc"-->
-<!--        -->
-<!--        />-->
+    <EditText
+        android:id="@+id/et_newGame_Players"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_newGame_Players"
+        app:layout_constraintTop_toBottomOf="@id/et_newGame_gameDesc"
+
+        android:minHeight="48dp"
+        android:inputType="number"
+
+        android:hint="@string/enter_playersHint"
+        />
 
 
     <Button
@@ -73,9 +81,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_newGame_Players"
 
-        android:text="Create Game"
+        android:text="@string/create_game"
         android:onClick="createGame"
         />
 

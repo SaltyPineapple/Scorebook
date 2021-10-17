@@ -11,9 +11,11 @@ public class NewGameActivity extends AppCompatActivity {
 
     public static final String Extra_GameTitle = "NewGameActivity.Extra_GameTitle";
     public static final String Extra_GameDesc = "NewGameActivity.Extra_GameDesc";
+    public static final String Extra_GamePlayers = "NewGameActivity.Extra_GamePlayers";
 
-    public EditText et_newGame_title;
-    public EditText et_newGame_desc;
+    public EditText mTitle;
+    public EditText mDesc;
+    public EditText mPlayers;
 
 
     @Override
@@ -21,20 +23,24 @@ public class NewGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
 
-        et_newGame_title = findViewById(R.id.et_newGame_gameTitle);
-        et_newGame_desc = findViewById(R.id.et_newGame_gameDesc);
+        mTitle = findViewById(R.id.et_newGame_gameTitle);
+        mDesc = findViewById(R.id.et_newGame_gameDesc);
+        mPlayers = findViewById(R.id.et_newGame_Players);
 
 
 
     }
 
     public void createGame(View view){
-        String title = et_newGame_title.getText().toString();
-        String desc = et_newGame_desc.getText().toString();
+        String title = mTitle.getText().toString();
+        String desc = mDesc.getText().toString();
+        String players = mPlayers.getText().toString();
+
 
         Intent createGameIntent = new Intent();
         createGameIntent.putExtra(Extra_GameTitle, title);
         createGameIntent.putExtra(Extra_GameDesc, desc);
+        createGameIntent.putExtra(Extra_GamePlayers, players);
         setResult(RESULT_OK, createGameIntent);
         finish();
 

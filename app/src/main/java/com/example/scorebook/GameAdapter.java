@@ -49,12 +49,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         private TextView mGameTitle;
         private TextView mGameDesc;
         private ImageView mGameImage;
+        private TextView mGamePlayers;
+
+        private String players = mContext.getString(R.string.playersCardView);
 
         ViewHolder(View itemView){
             super(itemView);
             mGameTitle = itemView.findViewById(R.id.card_title);
             mGameDesc = itemView.findViewById(R.id.card_desc);
             mGameImage = itemView.findViewById(R.id.card_image);
+            mGamePlayers = itemView.findViewById(R.id.card_players);
 
             itemView.setOnClickListener(this);
         }
@@ -62,6 +66,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         void bindTo(CardGame currentGame){
             mGameTitle.setText(currentGame.getTitle());
             mGameDesc.setText(currentGame.getDesc());
+            mGamePlayers.setText(players + currentGame.getPlayers());
             Glide.with(mContext).load(currentGame.getImageResource()).into(mGameImage);
         }
 

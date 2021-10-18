@@ -1,6 +1,7 @@
 package com.example.scorebook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,10 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
         @Override
         public void onClick(View v) {
-
+            CardGame currentGame = mGames.get(getAdapterPosition());
+            Intent newGame = new Intent(mContext, GameActivity.class);
+            newGame.putExtra("title", currentGame.getTitle());
+            mContext.startActivity(newGame);
         }
     }
 }

@@ -75,6 +75,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
         public void onClick(View v) {
             CardGame currentGame = mGames.get(getAdapterPosition());
             Intent newGame = new Intent(mContext, GameActivity.class);
+            newGame.putExtra("players", currentGame.getPlayers());
             newGame.putExtra("title", currentGame.getTitle());
             mContext.startActivity(newGame);
         }

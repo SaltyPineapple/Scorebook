@@ -11,6 +11,7 @@
     <string name="enter_titleHint">Enter Title</string>
     <string name="create_game">Create Game</string>
     <string name="game_title">Game Title:</string>
+    <string name="new_round">new round</string>
     <array name="game_images">
         <item>@drawable/img_baseball</item>
         <item>@drawable/img_badminton</item>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 newGame();
-                Snackbar.make(v, "Create a new game!", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Create a new game!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }

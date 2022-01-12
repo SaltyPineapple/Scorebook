@@ -13,40 +13,47 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
-    private ArrayList<CardGame> mGames;
+public class CardGameAdapter extends RecyclerView.Adapter<CardGameAdapter.GameViewHolder> {
+    private final LayoutInflater mInflater;
+    private List<CardGame> mGames;
     private Context mContext;
 
-    GameAdapter(Context context, ArrayList<CardGame> games){
-        this.mGames = games;
-        this.mContext = context;
-    }
+    CardGameAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+        mContext = context;
 
-    @NonNull
-    @Override
-    public GameAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GameAdapter.ViewHolder holder, int position) {
+    public GameViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+        View itemView = mInflater.inflate(R.layout.list_item, parent, false);
+        return new GameViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         CardGame currentGame = mGames.get(position);
-
         holder.bindTo(currentGame);
     }
 
     @Override
     public int getItemCount() {
-        return mGames.size();
+        if(mGames != null){
+            return  mGames.size();
+        }
+        else {
+            return 0;
+        }
     }
 
+    void setGames(List<CardGame> games){
+        mGames = games;
+        notifyDataSetChanged();
+    }
 
-
-
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+    class GameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mGameTitle;
         private TextView mGameDesc;
         private ImageView mGameImage;
@@ -54,14 +61,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder>{
 
         private String players = mContext.getString(R.string.playersCardView);
 
-        ViewHolder(View itemView){
+        private GameViewHolder(View itemView){
             super(itemView);
+
             mGameTitle = itemView.findViewById(R.id.card_title);
             mGameDesc = itemView.findViewById(R.id.card_desc);
             mGameImage = itemView.findViewById(R.id.card_image);
             mGamePlayers = itemView.findViewById(R.id.card_players);
 
             itemView.setOnClickListener(this);
+
         }
 
         void bindTo(CardGame currentGame){

@@ -1,6 +1,8 @@
 package com.example.scorebook;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +13,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int NEW_GAME_REQUEST = 1;
 
     private RecyclerView mRecyclerView;
-    private ArrayList<CardGame> mGames;
-    private GameAdapter mAdapter;
+    private List<CardGame> mGames;
+    private CardGameAdapter mAdapter;
+
+    private CardGameViewModel mGameViewModel;
 
 
 
@@ -33,19 +36,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Recycler View
         mRecyclerView = findViewById(R.id.recyclerView);
+        mAdapter = new CardGameAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         // Set Layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initalize card games
-        // will need to pull from data base -- MUCH LATER --
-        mGames = new ArrayList<>();
 
-        // Intialize adapter and set to recycler view
-        mAdapter = new GameAdapter(this,mGames);
-        mRecyclerView.setAdapter(mAdapter);
+        mGameViewModel = new ViewModelProvider(this).get(CardGameViewModel.class);
 
-
+        mGameViewModel.getAllGames().observe(this, new Observer<List<CardGame>>() {
+            @Override
+            public void onChanged(List<CardGame> cardGames) {
+                mAdapter.setGames(cardGames);
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,21 +77,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == NEW_GAME_REQUEST){
-            if(resultCode == RESULT_OK){
-                String newGameTitle = data.getStringExtra(NewGameActivity.Extra_GameTitle);
-                String newGameDesc = data.getStringExtra(NewGameActivity.Extra_GameDesc);
-                String playerString = data.getStringExtra(NewGameActivity.Extra_GamePlayers);
-                int players = Integer.parseInt(playerString);
 
-                TypedArray gameImageResource = getResources().obtainTypedArray(R.array.game_images);
-                Random rand = new Random();
+        if(requestCode == NEW_GAME_REQUEST && resultCode == RESULT_OK){
+            String newGameTitle = data.getStringExtra(NewGameActivity.Extra_GameTitle);
+            String newGameDesc = data.getStringExtra(NewGameActivity.Extra_GameDesc);
+            String playerString = data.getStringExtra(NewGameActivity.Extra_GamePlayers);
+            int players = Integer.parseInt(playerString);
 
-                mGames.add(new CardGame(newGameTitle, newGameDesc, players, gameImageResource.getResourceId(rand.nextInt(10), 0)));
-                gameImageResource.recycle();
+            TypedArray gameImageResource = getResources().obtainTypedArray(R.array.game_images);
+            Random rand = new Random();
 
-                mAdapter.notifyDataSetChanged();
-            }
+            CardGame newGame = new CardGame(newGameTitle, newGameDesc, players, gameImageResource.getResourceId(rand.nextInt(10), 0));
+            mGameViewModel.insert(newGame);
         }
+
     }
 }

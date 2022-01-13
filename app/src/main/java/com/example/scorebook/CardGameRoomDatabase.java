@@ -48,7 +48,7 @@ public abstract class CardGameRoomDatabase extends RoomDatabase {
         private final GameDAO mDao;
 
 
-        CardGame[] games = {new CardGame("Test 1", "Testing populating", 3, 1)};
+
 
 
         PopulateDbAsync(CardGameRoomDatabase db){
@@ -59,7 +59,7 @@ public abstract class CardGameRoomDatabase extends RoomDatabase {
         protected Void doInBackground(final Void ... params){
 
             //mDao.deleteAll();
-            mDao.insert(games[0]);
+            
 
             return null;
         }

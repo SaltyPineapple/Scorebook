@@ -1,14 +1,19 @@
 package com.example.scorebook;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,6 +57,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        // Item Touch Helper for deleting games
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                CardGame game = mAdapter.getGameAtPosition(position);
+
+                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
+                myAlertBuilder.setTitle("Delete?");
+                myAlertBuilder.setMessage("Are you sure you want to delete this?");
+
+                myAlertBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "Deleting " + game.getTitle() + "...", Toast.LENGTH_SHORT).show();
+                        mGameViewModel.deleteGame(game);
+                    }
+                });
+
+                myAlertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        Toast.makeText(getApplicationContext(), "Pressed Cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                myAlertBuilder.show();
+            }
+        });
+
+        helper.attachToRecyclerView(mRecyclerView);
+
+
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,5 +136,17 @@ public class MainActivity extends AppCompatActivity {
             mGameViewModel.insert(newGame);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.clear_data){
+            Toast.makeText(this, "Deleting all games...",
+                    Toast.LENGTH_SHORT).show();
+            mGameViewModel.deleteAll();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -53,6 +53,13 @@ public class CardGameAdapter extends RecyclerView.Adapter<CardGameAdapter.GameVi
         notifyDataSetChanged();
     }
 
+    public CardGame getGameAtPosition(int position){
+        return mGames.get(position);
+    }
+
+
+
+
     class GameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mGameTitle;
         private TextView mGameDesc;

@@ -20,4 +20,8 @@ public class CardGameViewModel extends AndroidViewModel {
     LiveData<List<CardGame>> getAllGames() { return mAllGames; }
 
     public void insert(CardGame game){ mRepository.insert(game); }
+
+    public void deleteAll() { mRepository.deleteAll(); }
+
+    public void deleteGame(CardGame game) { mRepository.deleteGame(game); }
 }

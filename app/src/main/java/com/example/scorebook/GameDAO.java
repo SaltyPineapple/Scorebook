@@ -2,6 +2,7 @@ package com.example.scorebook;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -16,6 +17,9 @@ public interface GameDAO {
 
     @Query("DELETE FROM game_table")
     void deleteAll();
+
+    @Delete
+    void deleteGame(CardGame game);
 
     @Query("SELECT * FROM game_table ORDER BY title ASC")
     LiveData<List<CardGame>> getAllGames();

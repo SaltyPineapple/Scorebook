@@ -19,7 +19,10 @@ import com.google.android.material.snackbar.Snackbar;
 public class GameActivity extends AppCompatActivity {
 
     public TextView mTitleTextView;
+    public TableLayout mTableLayout;
+    public TableRow mTotalScore;
     private int players;
+    private int roundCounter = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,8 @@ public class GameActivity extends AppCompatActivity {
 
         mTitleTextView = findViewById(R.id.gameTitle);
         mTitleTextView.setText(getIntent().getStringExtra("title"));
+        mTableLayout = findViewById(R.id.scoreTable);
+        mTotalScore = findViewById(R.id.scoresTotal);
 
         int players = getIntent().getIntExtra("players", 0);
         this.players = players;
@@ -36,29 +41,23 @@ public class GameActivity extends AppCompatActivity {
         init();
 
         FloatingActionButton fab = findViewById(R.id.fabNewRound);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GameActivity.this, NewRound.class);
-                startActivityForResult(intent, RESULT_OK);
-            }
+        fab.setOnClickListener(v -> {
+            newRound();
         });
 
 
     }
 
     public void init(){
-        TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
-
         TableRow playerRow = new TableRow(this);
         int playerRowId = 1;
         playerRow.setId(playerRowId);
 
         TableRow scoreRowOne = new TableRow(this);
-        int scoreRowOneId = 2;
-        scoreRowOne.setId(scoreRowOneId);
+        scoreRowOne.setId(roundCounter);
 
         for(int x=0; x<players; x++){
+            // add players row
             TextView tvPlayerRow = new TextView(this);
             String text = "Player " + (x+1);
             tvPlayerRow.setText(text);
@@ -66,36 +65,48 @@ public class GameActivity extends AppCompatActivity {
             tvPlayerRow.setId(100 + x);
             playerRow.addView(tvPlayerRow);
 
-            TextView tvScoreRow = new TextView(this);
-            String textScore = "10";
-            tvScoreRow.setText(textScore);
-            tvScoreRow.setTextSize(24);
-            tvScoreRow.setId(200 + x);
-            scoreRowOne.addView(tvScoreRow);
+            // add first round scores
+            EditText etScoreRow = new EditText(this);
+            String textScore = "0";
+            etScoreRow.setHint(textScore);
+            etScoreRow.setTextSize(24);
+            etScoreRow.setId(Integer.parseInt(roundCounter + "00" + x));
+            etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
+            scoreRowOne.addView(etScoreRow);
+
+            // add totals at bottom
+            // todo: bold the font
+            TextView tvTotalScore = new TextView(this);
+            tvTotalScore.setHint(textScore);
+            tvTotalScore.setTextSize(24);
+            tvTotalScore.setId(Integer.parseInt(roundCounter + "10" + x));
+            mTotalScore.addView(tvTotalScore);
+
         }
-        scoreTable.addView(playerRow);
-        scoreTable.addView(scoreRowOne);
+        roundCounter++;
+        mTableLayout.addView(playerRow,0);
+        mTableLayout.addView(scoreRowOne);
 
     }
 
-    // this needs to open a new activity to enter in scores
-    // call this from the FAB instead
+    // add a new row of empty edit texts
     public void newRound(){
+        TableRow scoreRow = new TableRow(this);
+        scoreRow.setId(roundCounter);
+        for(int x=0; x<players; x++){
+            EditText etScoreRow = new EditText(this);
+            String textScore = "0";
+            etScoreRow.setHint(textScore);
+            etScoreRow.setTextSize(24);
+            etScoreRow.setId(Integer.parseInt(roundCounter + "00" + x));
+            etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
+            scoreRow.addView(etScoreRow);
+        }
+        roundCounter++;
+        mTableLayout.addView(scoreRow);
+    }
 
-
-//        TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
-//
-//        for(int x=0; x<players; x++){
-//            TableRow tbrow = findViewById(100+x);
-//            EditText etScoreRow = new EditText(this);
-//            etScoreRow.setTextSize(24);
-//            etScoreRow.setMinWidth(100);
-//            etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
-//            tbrow.addView(etScoreRow);
-//
-//            etScoreRow.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            //scoreTable.addView(etRow);
-//        }
+    public void sumScores(){
 
     }
 

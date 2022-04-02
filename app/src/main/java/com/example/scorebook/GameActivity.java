@@ -50,30 +50,36 @@ public class GameActivity extends AppCompatActivity {
     public void init(){
         TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
 
+        TableRow playerRow = new TableRow(this);
+        int playerRowId = 1;
+        playerRow.setId(playerRowId);
+
+        TableRow scoreRowOne = new TableRow(this);
+        int scoreRowOneId = 2;
+        scoreRowOne.setId(scoreRowOneId);
+
         for(int x=0; x<players; x++){
-            TableRow tbrow = new TableRow(this);
-            tbrow.setId(100 + x);
-
-            EditText etPlayerRow = new EditText(this);
+            TextView tvPlayerRow = new TextView(this);
             String text = "Player " + (x+1);
-            etPlayerRow.setText(text);
-            etPlayerRow.setTextSize(24);
-            tbrow.addView(etPlayerRow);
+            tvPlayerRow.setText(text);
+            tvPlayerRow.setTextSize(24);
+            tvPlayerRow.setId(100 + x);
+            playerRow.addView(tvPlayerRow);
 
-//            EditText etScoreRow = new EditText(this);
-//            etScoreRow.setTextSize(24);
-//            etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
-//            etScoreRow.setMinWidth(100);
-//            tbrow.addView(etScoreRow);
-//            etScoreRow.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-
-            scoreTable.addView(tbrow);
-
+            TextView tvScoreRow = new TextView(this);
+            String textScore = "10";
+            tvScoreRow.setText(textScore);
+            tvScoreRow.setTextSize(24);
+            tvScoreRow.setId(200 + x);
+            scoreRowOne.addView(tvScoreRow);
         }
+        scoreTable.addView(playerRow);
+        scoreTable.addView(scoreRowOne);
 
     }
 
     // this needs to open a new activity to enter in scores
+    // call this from the FAB instead
     public void newRound(){
 
 

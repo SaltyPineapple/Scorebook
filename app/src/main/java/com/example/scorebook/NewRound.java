@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class NewRound extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class NewRound extends AppCompatActivity {
         bt_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Hey", Toast.LENGTH_SHORT).show();
                 Intent replyIntent = new Intent();
                 setResult(RESULT_OK, replyIntent);
                 finish();

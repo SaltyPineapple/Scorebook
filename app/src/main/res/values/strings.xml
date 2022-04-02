@@ -13,6 +13,7 @@
     <string name="game_title">Game Title:</string>
     <string name="new_round">new round</string>
     <string name="clear_all_data">Delete All Games</string>
+    <string name="save_round">Save Round</string>
     <array name="game_images">
         <item>@drawable/img_baseball</item>
         <item>@drawable/img_badminton</item>

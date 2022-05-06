@@ -93,6 +93,7 @@ public class CardGameAdapter extends RecyclerView.Adapter<CardGameAdapter.GameVi
             Intent newGame = new Intent(mContext, GameActivity.class);
             newGame.putExtra("players", currentGame.getPlayers());
             newGame.putExtra("title", currentGame.getTitle());
+            newGame.putExtra("playerNames", currentGame.getPlayerNames());
             mContext.startActivity(newGame);
         }
     }

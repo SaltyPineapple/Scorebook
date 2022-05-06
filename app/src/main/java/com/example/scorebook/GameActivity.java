@@ -3,27 +3,27 @@ package com.example.scorebook;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class GameActivity extends AppCompatActivity {
+
+    private static final int NEW_ROUND_REQUEST = 1;
 
     public TextView mTitleTextView;
     public TableLayout mTableLayout;
     public TableRow mTotalScore;
     private int players;
+    private String playerNames;
     private int roundCounter = 0;
 
     @Override
@@ -36,17 +36,27 @@ public class GameActivity extends AppCompatActivity {
         mTableLayout = findViewById(R.id.scoreTable);
         mTotalScore = findViewById(R.id.scoresTotal);
 
-        int players = getIntent().getIntExtra("players", 0);
-        this.players = players;
+        players = getIntent().getIntExtra("players", 0);
+        playerNames = getIntent().getStringExtra("playerNames");
 
-
+        // change this to restore() which will just grab everything from the db and restore it
         init();
 
+        // open a new activity for adding rounds
         FloatingActionButton fab = findViewById(R.id.fabNewRound);
         fab.setOnClickListener(v -> {
-            newRound();
-        });
+            Intent intent = new Intent(this, NewRound.class);
+            // puts the player count into the next activity
+            intent.putExtra("PLAYERS", players);
+            // puts the players names into the next activity
 
+            startActivityForResult(intent, NEW_ROUND_REQUEST);
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Add a new round!",
+                    Toast.LENGTH_SHORT).show();
+        });
 
     }
 
@@ -61,8 +71,8 @@ public class GameActivity extends AppCompatActivity {
         for(int x=0; x<players; x++){
             // add players row
             TextView tvPlayerRow = new TextView(this);
-            String text = "Player " + (x+1);
-            tvPlayerRow.setText(text);
+            //String text = "Player " + (x+1) + " ";
+            tvPlayerRow.setText(playerNames);
             tvPlayerRow.setTextSize(24);
             tvPlayerRow.setId(100 + x);
             playerRow.addView(tvPlayerRow);
@@ -72,13 +82,14 @@ public class GameActivity extends AppCompatActivity {
             String textScore = "0";
             etScoreRow.setHint(textScore);
             etScoreRow.setTextSize(24);
-            etScoreRow.setId(Integer.parseInt(roundCounter + "00" + x));
+            String currentID = roundCounter + "00" + x;
+            etScoreRow.setId(Integer.parseInt(currentID));
             etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
             scoreRowOne.addView(etScoreRow);
 
             // add totals at top
-            // todo: bold the font
             TextView tvTotalScore = new TextView(this);
+            tvTotalScore.setTypeface(Typeface.DEFAULT_BOLD);
             tvTotalScore.setHint(textScore);
             tvTotalScore.setTextSize(24);
             tvTotalScore.setId(Integer.parseInt( x + "10"));
@@ -108,22 +119,39 @@ public class GameActivity extends AppCompatActivity {
         mTableLayout.addView(scoreRow);
     }
 
+       /*
+       for each player
+       grab each score total it up
+       set proper textview to the total
+        */
     public void sumScores(){
-        /*
-        for each player
-        grab each score total it up
-        set proper textview to the total
-         */
-        for(int x=0; x<players; x++){
+
+        for(int x=0; x< mTableLayout.getChildCount(); x++){
+            // gets row
+            TextView view = (TextView) mTableLayout.getChildAt(x);
+
+            Toast.makeText(this, view.getText().toString(),
+                    Toast.LENGTH_SHORT).show();
+
+        }
+
+        /*for(int x=0; x<players; x++){
             int sum = 0;
             for(int y=0; y<roundCounter; y++){
-                EditText tvRound = findViewById(Integer.parseInt(y + "00" + x));
-                int roundScore = Integer.parseInt(tvRound.getText().toString());
+                String id = y + "00" + x;
+                EditText tvRound = findViewById(Integer.parseInt(id));
+                int roundScore;
+                if(tvRound.getText() == null){
+                    roundScore = 0;
+                }
+                else{
+                    roundScore = Integer.parseInt(tvRound.getText().toString());
+                }
                 sum += roundScore;
             }
             TextView tvTotal = findViewById(Integer.parseInt(x + "10"));
             tvTotal.setText(sum);
-        }
+        }*/
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

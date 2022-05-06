@@ -21,14 +21,17 @@ public class CardGame {
     @ColumnInfo(name="players")
     private int players;
 
+    @ColumnInfo(name="playerNames")
+    private String playerNames;
 
     private final int imageResource;
 
-    CardGame(@NonNull String title, @NonNull String desc, int players, int imageResource){
+    CardGame(@NonNull String title, @NonNull String desc, int players, String playerNames, int imageResource){
         this.title = title;
         this.desc = desc;
         this.players = players;
         this.imageResource = imageResource;
+        this.playerNames = playerNames;
     }
 
     @NonNull
@@ -57,6 +60,9 @@ public class CardGame {
         this.players = players;
     }
 
+    public String getPlayerNames() { return playerNames; }
+
+    public void setPlayerNames(String names){ this.playerNames = names; }
 
     public int getImageResource() {
         return imageResource;

@@ -128,12 +128,13 @@ public class MainActivity extends AppCompatActivity {
             String newGameTitle = data.getStringExtra(NewGameActivity.Extra_GameTitle);
             String newGameDesc = data.getStringExtra(NewGameActivity.Extra_GameDesc);
             String playerString = data.getStringExtra(NewGameActivity.Extra_GamePlayers);
+            String playerNames = data.getStringExtra(NewGameActivity.Extra_GamePlayersNames);
             int players = Integer.parseInt(playerString);
 
             TypedArray gameImageResource = getResources().obtainTypedArray(R.array.game_images);
             Random rand = new Random();
 
-            CardGame newGame = new CardGame(newGameTitle, newGameDesc, players, gameImageResource.getResourceId(rand.nextInt(10), 0));
+            CardGame newGame = new CardGame(newGameTitle, newGameDesc, players, playerNames, gameImageResource.getResourceId(rand.nextInt(10), 0));
             mGameViewModel.insert(newGame);
         }
 

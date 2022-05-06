@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
         <activity
+            android:name=".PlayerNameActivity"
+            android:exported="true" />
+        <activity
             android:name=".NewRound"
             android:exported="false" />
         <activity

@@ -75,13 +75,27 @@
         android:hint="@string/enter_playersHint"
         />
 
-
     <Button
+        android:id="@+id/bt_addPlayers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_newGame_Players"
+
+        android:text="Add Players"
+        android:onClick="addPlayers"
+        />
+
+
+    <Button
+        android:id="@+id/bt_createGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_addPlayers"
+
 
         android:text="@string/create_game"
         android:onClick="createGame"

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -23,8 +24,9 @@ public class GameActivity extends AppCompatActivity {
     public TableLayout mTableLayout;
     public TableRow mTotalScore;
     private int players;
-    private String playerNames;
+    private String playerNamesCSV;
     private int roundCounter = 0;
+    private String[] playerNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,11 @@ public class GameActivity extends AppCompatActivity {
         mTotalScore = findViewById(R.id.scoresTotal);
 
         players = getIntent().getIntExtra("players", 0);
-        playerNames = getIntent().getStringExtra("playerNames");
+        playerNamesCSV = getIntent().getStringExtra("playerNames");
 
         // change this to restore() which will just grab everything from the db and restore it
         init();
+        restore();
 
         // open a new activity for adding rounds
         FloatingActionButton fab = findViewById(R.id.fabNewRound);
@@ -60,6 +63,11 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    // this method will restore all items from the db into the proper place
+    public void restore(){
+
+    }
+
     public void init(){
         TableRow playerRow = new TableRow(this);
         int playerRowId = 1;
@@ -70,35 +78,40 @@ public class GameActivity extends AppCompatActivity {
 
         for(int x=0; x<players; x++){
             // add players row
-            TextView tvPlayerRow = new TextView(this);
-            //String text = "Player " + (x+1) + " ";
-            tvPlayerRow.setText(playerNames);
-            tvPlayerRow.setTextSize(24);
-            tvPlayerRow.setId(100 + x);
-            playerRow.addView(tvPlayerRow);
-
-            // add first round scores
-            EditText etScoreRow = new EditText(this);
-            String textScore = "0";
-            etScoreRow.setHint(textScore);
-            etScoreRow.setTextSize(24);
-            String currentID = roundCounter + "00" + x;
-            etScoreRow.setId(Integer.parseInt(currentID));
-            etScoreRow.setInputType(InputType.TYPE_CLASS_NUMBER);
-            scoreRowOne.addView(etScoreRow);
+            TextView tvPlayerRowItem = new TextView(this);
+            tvPlayerRowItem.setLayoutParams(new TableRow.LayoutParams());
+            // tvPlayerRowItem.setText(playerNames);
+            tvPlayerRowItem.setTextSize(24);
+            tvPlayerRowItem.setId(100 + x);
+            tvPlayerRowItem.getLayoutParams().width = 400;
+            tvPlayerRowItem.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            playerRow.addView(tvPlayerRowItem);
 
             // add totals at top
-            TextView tvTotalScore = new TextView(this);
-            tvTotalScore.setTypeface(Typeface.DEFAULT_BOLD);
-            tvTotalScore.setHint(textScore);
-            tvTotalScore.setTextSize(24);
-            tvTotalScore.setId(Integer.parseInt( x + "10"));
-            mTotalScore.addView(tvTotalScore);
+            TextView tvTotalScoreItem = new TextView(this);
+            tvTotalScoreItem.setTypeface(Typeface.DEFAULT_BOLD);
+            tvTotalScoreItem.setText("0");
+            tvTotalScoreItem.setTextSize(24);
+            tvTotalScoreItem.setId(Integer.parseInt( x + "10"));
+            mTotalScore.addView(tvTotalScoreItem);
 
         }
         roundCounter++;
         mTableLayout.addView(playerRow,0);
         mTableLayout.addView(scoreRowOne);
+
+        // this loop breaks up the csv player names
+        playerNames = playerNamesCSV.split(",");
+        for (String name:
+             playerNames) {
+            name = name.trim();
+        }
+
+        // this loop sets each of the player names correctly
+        for(int x=0; x<playerRow.getChildCount(); x++){
+            TextView child = (TextView)playerRow.getChildAt(x);
+            child.setText(playerNames[x]);
+        }
 
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.Random;
@@ -22,6 +23,8 @@ public class NewGameActivity extends AppCompatActivity {
     public EditText mDesc;
     public EditText mPlayers;
     public String playerNames;
+    public Button submitButton;
+    public Button addPlayersButton;
 
 
     @Override
@@ -32,6 +35,9 @@ public class NewGameActivity extends AppCompatActivity {
         mTitle = findViewById(R.id.et_newGame_gameTitle);
         mDesc = findViewById(R.id.et_newGame_gameDesc);
         mPlayers = findViewById(R.id.et_newGame_Players);
+        submitButton = findViewById(R.id.bt_createGame);
+        addPlayersButton = findViewById(R.id.bt_addPlayers);
+        submitButton.setEnabled(false);
 
     }
 
@@ -57,6 +63,8 @@ public class NewGameActivity extends AppCompatActivity {
 
         if(requestCode == NAME_PLAYERS_REQUEST && resultCode == RESULT_OK){
             playerNames = data.getStringExtra(PlayerNameActivity.Extra_PlayersNames);
+            submitButton.setEnabled(true);
+            addPlayersButton.setEnabled(false);
         }
     }
 

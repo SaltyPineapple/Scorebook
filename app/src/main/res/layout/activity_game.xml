@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content">
 
                 <TableRow
-                    android:id="@+id/scoresTotal">
+                    android:id="@+id/scoresTotal"
+                    android:layout_width="match_parent">
                 </TableRow>
             </TableLayout>
         </ScrollView>

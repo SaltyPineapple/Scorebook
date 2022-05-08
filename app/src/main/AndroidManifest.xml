@@ -13,7 +13,7 @@
             android:name=".PlayerNameActivity"
             android:exported="true" />
         <activity
-            android:name=".NewRound"
+            android:name=".NewRoundActivity"
             android:exported="false" />
         <activity
             android:name=".GameActivity"

@@ -19,17 +19,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class GameActivity extends AppCompatActivity {
 
     public static final String Extra_Scores= "GameActivity.Extra_Scores";
+    public static final String Extra_CurrentGame= "GameActivity.Extra_CurrentGame";
 
     private static final int NEW_ROUND_REQUEST = 1;
 
     public TextView mTitleTextView;
     public TableLayout mTableLayout;
     public TableRow mTotalScore;
+
     private int playerCount;
-    private String playerNamesCSV;
-    private String playerScoresCSV;
-    private int roundCounter = 0;
+    private String playerNamesCSVFromDB;
     private String[] playerNames;
+    private String playerScoresCSVFromDB;
+    private String[] playerScores;
+    StringBuilder scoresSB = new StringBuilder();
+    private CardGame mCurrentGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,10 @@ public class GameActivity extends AppCompatActivity {
         mTotalScore = findViewById(R.id.scoresTotal);
 
         playerCount = getIntent().getIntExtra("players", 0);
-        playerNamesCSV = getIntent().getStringExtra("playerNames");
+        playerNamesCSVFromDB = getIntent().getStringExtra("playerNames");
+        playerScoresCSVFromDB = getIntent().getStringExtra("playerScores");
+
+        mCurrentGame = (CardGame) getIntent().getParcelableExtra("currentGameID");
 
         // change this to restore() which will just grab everything from the db and restore it
         init();
@@ -62,15 +69,34 @@ public class GameActivity extends AppCompatActivity {
                     getApplicationContext(),
                     "Add a new round!",
                     Toast.LENGTH_SHORT).show();
-
-
         });
 
     }
 
-    // this method will restore all items from the db into the proper place
+    // this method will restore all scores from the db into the proper place
     public void restore(){
+        if(playerScoresCSVFromDB != null){
+            scoresSB.append(playerScoresCSVFromDB);
 
+            String[] scoreSplit = playerScoresCSVFromDB.split(",");
+            int rounds = scoreSplit.length / playerCount;
+
+            int count = 0;
+            for(int x=0; x< rounds; x++){
+                TableRow scoreRow = new TableRow(this);
+
+                for(int n =0; n<playerCount; n++){
+                    TextView score = new TextView(this);
+                    score.setTextSize(24);
+                    score.setText(scoreSplit[count]);
+                    scoreRow.addView(score);
+                    count++;
+                }
+                mTableLayout.addView(scoreRow);
+            }
+
+            sumScores();
+        }
     }
 
     public void init(){
@@ -79,13 +105,11 @@ public class GameActivity extends AppCompatActivity {
         playerRow.setId(playerRowId);
 
         TableRow scoreRowOne = new TableRow(this);
-        scoreRowOne.setId(roundCounter);
 
         for(int x=0; x<playerCount; x++){
             // add players row
             TextView tvPlayerRowItem = new TextView(this);
             tvPlayerRowItem.setLayoutParams(new TableRow.LayoutParams());
-            // tvPlayerRowItem.setText(playerNames);
             tvPlayerRowItem.setTextSize(24);
             tvPlayerRowItem.getLayoutParams().width = 300;
             tvPlayerRowItem.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -99,12 +123,11 @@ public class GameActivity extends AppCompatActivity {
             tvTotalScoreItem.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             mTotalScore.addView(tvTotalScoreItem);
         }
-        roundCounter++;
         mTableLayout.addView(playerRow,0);
         mTableLayout.addView(scoreRowOne);
 
         // this loop breaks up the csv player names
-        playerNames = playerNamesCSV.split(",");
+        playerNames = playerNamesCSVFromDB.split(",");
         for (String name:
              playerNames) {
             name = name.trim();
@@ -118,11 +141,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    // add a new row of empty edit texts
     public void newRound(){
-        // split the score into an array
-        String[] playerScores = playerScoresCSV.split(",");
-
         TableRow scoreRow = new TableRow(this);
 
         for(int x=0; x<playerCount; x++){
@@ -135,11 +154,6 @@ public class GameActivity extends AppCompatActivity {
         sumScores();
     }
 
-       /*
-       for each player
-       grab each score total it up
-       set proper textview to the total
-        */
     public void sumScores(){
         // initialize totals arr
         int[] totals = new int[playerCount];
@@ -166,11 +180,19 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    public void concat(String[] newScores){
+        for(int x=0; x<playerCount; x++){
+            scoresSB.append(newScores[x]);
+            scoresSB.append(",");
+        }
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == NEW_ROUND_REQUEST && resultCode == RESULT_OK){
-            playerScoresCSV = data.getStringExtra(NewRoundActivity.Extra_Scores);
+            playerScores = data.getStringArrayExtra(NewRoundActivity.Extra_Scores);
             newRound();
+            concat(playerScores);
         }
     }
 
@@ -185,8 +207,13 @@ public class GameActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == R.id.updateScore){
-            Toast.makeText(this, "Saving Round...",
+            Toast.makeText(this, "Saving Game...",
                     Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(Extra_Scores, scoresSB.toString());
+            intent.putExtra(Extra_CurrentGame, mCurrentGame); // need to put in the game here!! so close
+            startActivity(intent);
+
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -17,7 +17,7 @@ public class PlayerNameActivity extends AppCompatActivity {
 
     public static final String Extra_PlayersNames = "PlayerNameActivity.Extra_GamesPlayersNames";
 
-    public int numPlayers;
+    public int playerCount;
 
     public TableLayout mTableLayout;
 
@@ -25,7 +25,7 @@ public class PlayerNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_name);
-        numPlayers = Integer.parseInt(getIntent().getExtras().getString(NewGameActivity.Extra_GamePlayers));
+        playerCount = Integer.parseInt(getIntent().getExtras().getString(NewGameActivity.Extra_GamePlayers));
 
         mTableLayout = findViewById(R.id.tl_namePlayers);
 
@@ -33,7 +33,7 @@ public class PlayerNameActivity extends AppCompatActivity {
     }
 
     public void init(){
-        for(int x=0; x< numPlayers; x++){
+        for(int x=0; x< playerCount; x++){
             TableRow nameRow = new TableRow(this);
 
             TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

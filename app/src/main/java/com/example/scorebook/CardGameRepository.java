@@ -29,6 +29,8 @@ public class CardGameRepository {
 
     public void deleteGame(CardGame game) { new deleteGameAsyncTask(mGameDAO).execute(game); }
 
+    public void updateScores(String title, String scores) { new updateGameAsyncTask(mGameDAO).execute(title, scores); }
+
     private static class insertAsyncTask extends AsyncTask<CardGame, Void, Void> {
         private GameDAO mAsyncGameDAO;
 
@@ -68,6 +70,18 @@ public class CardGameRepository {
         @Override
         protected Void doInBackground(final CardGame ... params){
             mAsyncGameDAO.deleteGame(params[0]);
+            return null;
+        }
+    }
+
+    private static class updateGameAsyncTask extends AsyncTask<String, String, Void> {
+        private GameDAO mAsyncGameDao;
+
+        updateGameAsyncTask(GameDAO dao) { this.mAsyncGameDao = dao; }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            mAsyncGameDao.updateScores(strings[0], strings[1]);
             return null;
         }
     }

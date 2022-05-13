@@ -28,17 +28,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int NEW_GAME_REQUEST = 1;
 
     private RecyclerView mRecyclerView;
-    private List<CardGame> mGames;
     private CardGameAdapter mAdapter;
 
     private CardGameViewModel mGameViewModel;
 
+    public String scoresFromActivity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        scoresFromActivity = getIntent().getStringExtra(GameActivity.Extra_Scores);
+        CardGame currentGame = (CardGame) getIntent().getParcelableExtra(GameActivity.Extra_CurrentGame);
 
         // Initialize Recycler View
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Set Layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         mGameViewModel = new ViewModelProvider(this).get(CardGameViewModel.class);
 
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        updateScores(currentGame);
 
         // Item Touch Helper for deleting games
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -96,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
         helper.attachToRecyclerView(mRecyclerView);
 
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,14 +110,18 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void newGame() {
-        // pull up new activity and return data from it
-
         Intent intent = new Intent(this, NewGameActivity.class);
         startActivityForResult(intent,NEW_GAME_REQUEST);
+    }
 
+    private void updateScores(CardGame game){
+        if(game != null) {
+            mGameViewModel.updateScores(game.getTitle(), scoresFromActivity);
+        }
     }
 
     @Override
@@ -129,15 +133,15 @@ public class MainActivity extends AppCompatActivity {
             String newGameDesc = data.getStringExtra(NewGameActivity.Extra_GameDesc);
             String playerString = data.getStringExtra(NewGameActivity.Extra_GamePlayers);
             String playerNames = data.getStringExtra(NewGameActivity.Extra_GamePlayersNames);
+            String scores = data.getStringExtra(GameActivity.Extra_Scores);
             int players = Integer.parseInt(playerString);
 
             TypedArray gameImageResource = getResources().obtainTypedArray(R.array.game_images);
             Random rand = new Random();
 
-            CardGame newGame = new CardGame(newGameTitle, newGameDesc, players, playerNames, gameImageResource.getResourceId(rand.nextInt(10), 0));
+            CardGame newGame = new CardGame(newGameTitle, newGameDesc, players, playerNames, scores, gameImageResource.getResourceId(rand.nextInt(10), 0));
             mGameViewModel.insert(newGame);
         }
-
     }
 
     @Override

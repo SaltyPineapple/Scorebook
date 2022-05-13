@@ -1,5 +1,8 @@
 package com.example.scorebook;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +10,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "game_table")
-public class CardGame {
+public class CardGame implements Parcelable {
 
     @PrimaryKey
     @NonNull
@@ -24,15 +27,40 @@ public class CardGame {
     @ColumnInfo(name="playerNames")
     private String playerNames;
 
+    @ColumnInfo(name="scores")
+    private String scores;
+
     private final int imageResource;
 
-    CardGame(@NonNull String title, @NonNull String desc, int players, String playerNames, int imageResource){
+    CardGame(@NonNull String title, @NonNull String desc, int players, String playerNames, String scores, int imageResource){
         this.title = title;
         this.desc = desc;
         this.players = players;
         this.imageResource = imageResource;
         this.playerNames = playerNames;
+        this.scores = scores;
     }
+
+    protected CardGame(Parcel in) {
+        title = in.readString();
+        desc = in.readString();
+        players = in.readInt();
+        playerNames = in.readString();
+        scores = in.readString();
+        imageResource = in.readInt();
+    }
+
+    public static final Creator<CardGame> CREATOR = new Creator<CardGame>() {
+        @Override
+        public CardGame createFromParcel(Parcel in) {
+            return new CardGame(in);
+        }
+
+        @Override
+        public CardGame[] newArray(int size) {
+            return new CardGame[size];
+        }
+    };
 
     @NonNull
     public String getTitle() {
@@ -66,5 +94,27 @@ public class CardGame {
 
     public int getImageResource() {
         return imageResource;
+    }
+
+    public String getScores() {
+        return scores;
+    }
+
+    public void setScores(String scores) {
+        this.scores = scores;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(desc);
+        parcel.writeInt(players);
+        parcel.writeInt(imageResource);
+        parcel.writeString(scores);
     }
 }

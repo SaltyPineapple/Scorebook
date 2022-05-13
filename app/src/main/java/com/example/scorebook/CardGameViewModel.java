@@ -24,4 +24,6 @@ public class CardGameViewModel extends AndroidViewModel {
     public void deleteAll() { mRepository.deleteAll(); }
 
     public void deleteGame(CardGame game) { mRepository.deleteGame(game); }
+
+    public void updateScores(String title, String scores) { mRepository.updateScores(title, scores); }
 }

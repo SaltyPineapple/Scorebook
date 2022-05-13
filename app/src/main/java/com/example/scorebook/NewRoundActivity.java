@@ -14,9 +14,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// was going to be used if I wanted to create a new round each time with a new activity
-// (entering scores within a different screen and then that is what comes up on the score board)
-// (non-editable scores on scoreboard)
 public class NewRoundActivity extends AppCompatActivity {
 
     public static final String Extra_Scores= "NewRoundActivity.Extra_Scores";
@@ -50,9 +47,6 @@ public class NewRoundActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
     }
 
     public void init(){
@@ -61,7 +55,6 @@ public class NewRoundActivity extends AppCompatActivity {
 
             TableRow.LayoutParams params = new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(converter.convertDPS(120, this), converter.convertDPS(10, this), converter.convertDPS(60, this),0);
-
 
             EditText playerScore = new EditText(this);
             playerScore.setLayoutParams(params);
@@ -78,15 +71,14 @@ public class NewRoundActivity extends AppCompatActivity {
         }
     }
 
-    public String concat(){
-        StringBuilder scores = new StringBuilder();
-        for(int x=0; x< mLayout.getChildCount(); x++){
+    public String[] concat(){
+        String[] scores = new String[playerCount];
+        for(int x=0; x< mLayout.getChildCount(); x++) {
             TableRow row = (TableRow) mLayout.getChildAt(x);
-            EditText item = (EditText)row.getChildAt(0);
-            scores.append(item.getText().toString());
-            scores.append(",");
+            EditText item = (EditText) row.getChildAt(0);
+            scores[x] = item.getText().toString();
         }
-        return scores.toString();
+        return scores;
     }
 
 

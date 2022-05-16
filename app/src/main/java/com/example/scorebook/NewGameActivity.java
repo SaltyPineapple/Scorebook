@@ -69,9 +69,11 @@ public class NewGameActivity extends AppCompatActivity {
     }
 
     public void addPlayers(View view) {
+        assert mPlayers != null;
         String players = mPlayers.getText().toString();
         Intent namePlayersIntent = new Intent(this,PlayerNameActivity.class);
         namePlayersIntent.putExtra(Extra_GamePlayers, players);
         startActivityForResult(namePlayersIntent, NAME_PLAYERS_REQUEST);
+
     }
 }

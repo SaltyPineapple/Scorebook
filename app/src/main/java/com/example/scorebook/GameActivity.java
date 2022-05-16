@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -89,6 +90,7 @@ public class GameActivity extends AppCompatActivity {
                     TextView score = new TextView(this);
                     score.setTextSize(24);
                     score.setText(scoreSplit[count]);
+                    score.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     scoreRow.addView(score);
                     count++;
                 }
@@ -96,23 +98,25 @@ public class GameActivity extends AppCompatActivity {
             }
 
             sumScores();
+            styleRows();
         }
     }
 
     public void init(){
         TableRow playerRow = new TableRow(this);
-        int playerRowId = 1;
-        playerRow.setId(playerRowId);
-
         TableRow scoreRowOne = new TableRow(this);
 
         for(int x=0; x<playerCount; x++){
             // add players row
             TextView tvPlayerRowItem = new TextView(this);
             tvPlayerRowItem.setLayoutParams(new TableRow.LayoutParams());
+            tvPlayerRowItem.setTypeface(Typeface.DEFAULT_BOLD);
             tvPlayerRowItem.setTextSize(24);
-            tvPlayerRowItem.getLayoutParams().width = 300;
+            tvPlayerRowItem.setMinWidth(300);
+            tvPlayerRowItem.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
             tvPlayerRowItem.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvPlayerRowItem.setBackgroundColor(getResources().getColor(R.color.darkerBlue));
+            tvPlayerRowItem.setTextColor(getResources().getColor(R.color.white));
             playerRow.addView(tvPlayerRowItem);
 
             // add totals at top
@@ -121,6 +125,8 @@ public class GameActivity extends AppCompatActivity {
             tvTotalScoreItem.setText("0");
             tvTotalScoreItem.setTextSize(24);
             tvTotalScoreItem.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTotalScoreItem.setBackgroundColor(getResources().getColor(R.color.darkerBlue));
+            tvTotalScoreItem.setTextColor(getResources().getColor(R.color.white));
             mTotalScore.addView(tvTotalScoreItem);
         }
         mTableLayout.addView(playerRow,0);
@@ -148,10 +154,12 @@ public class GameActivity extends AppCompatActivity {
             TextView score = new TextView(this);
             score.setTextSize(24);
             score.setText(playerScores[x]);
+            score.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             scoreRow.addView(score);
         }
         mTableLayout.addView(scoreRow);
         sumScores();
+        styleRows();
     }
 
     public void sumScores(){
@@ -177,6 +185,23 @@ public class GameActivity extends AppCompatActivity {
         for(int i=0; i<scoresRow.getChildCount(); i++){
             TextView score = (TextView) scoresRow.getChildAt(i);
             score.setText(String.valueOf(totals[i]));
+        }
+    }
+
+    public void styleRows(){
+        for(int x=2; x<mTableLayout.getChildCount(); x++){
+            TableRow currRow = (TableRow) mTableLayout.getChildAt(x);
+            for(int y=0; y< currRow.getChildCount(); y++){
+
+                TextView view = (TextView) currRow.getChildAt(y);
+                view.setTextColor(getResources().getColor(R.color.black));
+            }
+            if(x % 2 == 0){
+                currRow.setBackgroundColor(getResources().getColor(R.color.lightBlue));
+            }
+            else {
+                currRow.setBackgroundColor(getResources().getColor(R.color.white));
+            }
         }
     }
 

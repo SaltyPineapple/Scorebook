@@ -15,6 +15,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.scorebook.customviews.BetterTableRow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class GameActivity extends AppCompatActivity {
@@ -27,6 +29,8 @@ public class GameActivity extends AppCompatActivity {
     public TextView mTitleTextView;
     public TableLayout mTableLayout;
     public TableRow mTotalScore;
+
+    public BetterTableRow mTestBetterTableRow;
 
     private int playerCount;
     private String playerNamesCSVFromDB;
@@ -45,6 +49,8 @@ public class GameActivity extends AppCompatActivity {
         mTitleTextView.setText(getIntent().getStringExtra("title"));
         mTableLayout = findViewById(R.id.scoreTable);
         mTotalScore = findViewById(R.id.scoresTotal);
+
+        mTestBetterTableRow = findViewById(R.id.testRow);
 
         playerCount = getIntent().getIntExtra("players", 0);
         playerNamesCSVFromDB = getIntent().getStringExtra("playerNames");

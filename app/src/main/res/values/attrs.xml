@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BetterTableRow">
+        <attr name="rowColor" format="enum">
+            <enum name="blue" value="0" />
+            <enum name="white" value="1" />
+            <enum name="green" value="2" />
+        </attr>
+        <attr name="columns" format="integer" />
+    </declare-styleable>
+</resources>
